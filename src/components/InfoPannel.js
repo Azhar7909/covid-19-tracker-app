@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import logo from '../assets/logo/logo.png';
-import { Typography } from '@material-ui/core';
-import { contextData } from '../global/GlobalData';
+import { Typography, capitalize } from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,9 +35,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CenteredGrid() {
     const classes = useStyles();
-//  Destructure Data to Use 
-    const {data} = useContext(contextData);
-    console.log(data);
+
+    const [covidInfo, setCovidInfo] = useState({})
+
+    async function getData() {
+        const response = await fetch("https://api.thevirustracker.com/free-api?global=stats");
+        let data = await response.json();
+        delete data.results[0].source;
+        console.log(data.results[0]);
+        setCovidInfo(data.results[0])
+    }
+
+    useEffect(() => {
+        getData()
+
+    }, [])
 
     return (
         <div className={classes.root}>
@@ -47,15 +59,14 @@ export default function CenteredGrid() {
                 </Typography>
                 <img className={classes.InfoLogo} alt="Info Pannel Logo" src={logo} elevation={4} />
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={4}>
-                        <Paper className={classes.paper} elevation={4}>xs=3</Paper>
+                { Object.keys(covidInfo).map((key,ind)=>(
+                    <Grid item xs={12} sm={4} key={ind+1} >
+                        <Paper className={classes.paper}  elevation={4}>
+                            <h3 style={{color:'#3f51b5'}}>{key.replace(/_/g,' ').toUpperCase()}</h3>
+                            {covidInfo[key]}
+                        </Paper>
                     </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Paper className={classes.paper} elevation={4}>xs=3</Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Paper className={classes.paper} elevation={4}>xs=3</Paper>
-                    </Grid>
+                ))}
                 </Grid>
             </Paper>
         </div>
