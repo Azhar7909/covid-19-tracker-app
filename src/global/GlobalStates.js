@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import logo from '../assets/logo/logo.png';
-import { Typography } from '@material-ui/core';
+import PieChart from '../components/Chart';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
     },
     manPaper: {
         padding: 15,
-        textAlign: 'center',
         marginBottom: 70,
+        textAlign: 'center',
     },
     InfoLogo: {
         height: 230,
@@ -45,6 +45,7 @@ export default function GlobalStates() {
         delete data.results[0].source;
         // console.log(data.results[0]);
         setCovidInfo(data.results[0])
+        localStorage.setItem("DataChar",JSON.stringify(data.results[0]));
     }
 
     useEffect(() => {
@@ -55,19 +56,27 @@ export default function GlobalStates() {
     return (
         <div className={classes.root}>
             <Paper elevation={4} className={classes.manPaper}>
-                <Typography className={classes.heading} variant="h2" gutterBottom>
-                    GLOBALLY
-                </Typography>
-                <img className={classes.InfoLogo} alt="Info Pannel Logo" src={logo} elevation={4} />
-                <Grid container spacing={2}>
-                { Object.keys(covidInfo).map((key,ind)=>(
-                    <Grid item xs={12} sm={4} key={ind+1} >
-                        <Paper className={classes.paper}  elevation={4}>
-                            <h3 style={{color:'#3f51b5'}}>{key.replace(/_/g,' ').toUpperCase()}</h3>
-                            {covidInfo[key]}
-                        </Paper>
+                <Grid container style={{ padding: '35px', display: 'flex', justifyContent: 'space-around' }} spacing={2}>
+                    <Grid className={classes.heading} variant="h2">
+                        GLOBALLY<br />
+                        <img className={classes.InfoLogo} alt="Info Pannel Logo" src={logo} elevation={4} />
                     </Grid>
-                ))}
+                    <div>
+                        <p style={{color:'#FFCE56',textAlign: 'center',marginTop: '50px'}}>TOTAL CASES</p>
+                        <p style={{color:'#FF6384',textAlign: 'center'}}>TOTAL DEATHS</p>
+                        <p style={{color:'#36A2EB',textAlign: 'center'}}>TOTAL RECOVERED</p>
+                    </div>
+                    <PieChart />
+                </Grid>
+                <Grid container spacing={2}>
+                    {Object.keys(covidInfo).map((key, ind) => (
+                        <Grid item xs={12} sm={4} key={ind + 1} >
+                            <Paper className={classes.paper} elevation={4}>
+                                <h3 style={{ color: '#3f51b5' }}>{key.replace(/_/g, ' ').toUpperCase()}</h3>
+                                {covidInfo[key]}
+                            </Paper>
+                        </Grid>
+                    ))}
                 </Grid>
             </Paper>
         </div>
