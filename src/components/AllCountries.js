@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         color: 'cadetblue',
         marginBottom: -15,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
     },
 }));
 
@@ -57,7 +57,7 @@ export default function AllCountries() {
     return (
         <div className={classes.root}>
             <Paper elevation={4} className={classes.manPaper}>
-                <Typography className={classes.heading} variant="h2" gutterBottom>
+                <Typography xs={12} sm={4} className={classes.heading} variant="h4" gutterBottom>
                     {covidInfo[0].title}
                 </Typography>
                 <Grid container spacing={2}>
